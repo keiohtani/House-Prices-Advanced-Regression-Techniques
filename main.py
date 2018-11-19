@@ -105,7 +105,7 @@ def main():
     manageNAValues(trainDF, inputsCol)
     encodeNominalData(trainDF, inputsCol)
     alg = GradientBoostingRegressor()
-    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='mean_squared_error')
+    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print(np.mean(cvScores))
     #print(trainDF.loc[0:10, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond",
     #                 "PoolQC"]])
