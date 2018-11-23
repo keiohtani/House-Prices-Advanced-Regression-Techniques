@@ -5,7 +5,7 @@ from sklearn import model_selection
 import numpy as np
 
 def readData():
-    inputsCol = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+    inputsCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
        'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
        'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
        'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
@@ -23,7 +23,8 @@ def readData():
        'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
        'SaleCondition']
     outputCol = ['SalePrice']
-    trainDF = pd.read_csv("data/train.csv")
+    trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + outputCol)
+    print(trainDF)
     return trainDF, inputsCol, outputCol
 
 def nominalValueConversion(x):  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
@@ -66,6 +67,13 @@ def poolQCConversion(x):    # there is no poor for pool
     else:
         return x
 
+def normalization(targetDF, columns):
+    targetDF.loc[:, columns] = (targetDF.loc[:, columns] - targetDF.loc[:, columns].min()) / (
+                targetDF.loc[:, columns].max() - targetDF.loc[:, columns].min())
+
+def standardize(df, columns):
+    df.loc[:,columns] = (df.loc[:,columns] - df.loc[:,columns].mean()) / df.loc[:,columns].std()
+
 """
 Generic numerical encoder for string values ('a' = 0, 'b' = 1, so on - nothing special)
 Original code, based on https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
@@ -73,10 +81,10 @@ Original code, based on https://scikit-learn.org/stable/modules/generated/sklear
 def encodeNominalData(inputDF, inputCols):
     reps = len(inputCols)
     for i in range(reps):
-        print(i)
+        # print(inputCols[i])
         labelEncoder = preprocessing.LabelEncoder()
-        labelEncoder.fit(inputDF.iloc[:,i])
-        inputDF.iloc[:,i] = labelEncoder.transform(inputDF.iloc[:,i])
+        labelEncoder.fit(inputDF.loc[:,inputCols[i]])
+        inputDF.loc[:,inputCols[i]] = labelEncoder.transform(inputDF.loc[:,inputCols[i]])
         
 def manageNAValues(inputDF, inputCols):
     
@@ -91,23 +99,47 @@ def manageNAValues(inputDF, inputCols):
     for column in inputCols:
         inputDF.loc[:,column] = inputDF.loc[:,column].fillna(inputDF.loc[:,column].mode()[0])
 
-def preprocess(targetDF, sourceDF):
+def preprocess(targetDF, sourceDF, inputsCol):
+
+    nominalDataCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+                      'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
+                      'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
+                      'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
+                      'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
+                      'MasVnrArea', 'Foundation',
+                      'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',
+                      'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating',
+                      'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF',
+                      'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath',
+                      'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr',
+                      'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'GarageType',
+                      'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea',
+                      'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
+                      'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea',
+                      'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
+                      'SaleCondition']  # removed 'ID'
+
+    encodeNominalData(targetDF, nominalDataCol)
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
     targetDF.loc[:, exConversionCols] = targetDF.loc[:,exConversionCols].applymap(lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     #targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     targetDF.loc[:, "BsmtQual"] = targetDF.loc[:, "BsmtQual"].map(lambda x: bsmtQualConversion(x))
     targetDF.loc[:, "PoolQC"] = targetDF.loc[:, "PoolQC"].map(lambda x: poolQCConversion(x))
+    # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
+    normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
+
+    print(targetDF)
+
 
 
 def main():
     trainDF, inputsCol, outputCol = readData()
-    #preprocess(trainDF, trainDF)
     manageNAValues(trainDF, inputsCol)
-    encodeNominalData(trainDF, inputsCol)
+    preprocess(trainDF, trainDF, inputsCol)
     alg = GradientBoostingRegressor()
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print(np.mean(cvScores))
     #print(trainDF.loc[0:10, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond",
     #                 "PoolQC"]])
-    print(trainDF.loc[0:10,:])
+    #print(trainDF.loc[0:10,:])
 main()
