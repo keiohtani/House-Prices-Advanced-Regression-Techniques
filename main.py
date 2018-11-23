@@ -21,11 +21,21 @@ def readData():
        'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
        'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
        'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
-       'SaleCondition']
+       'SaleCondition'] # I think we should drop Utilities because all the values are same except for one but the result is better with Utilities
     outputCol = ['SalePrice']
     trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + outputCol)
     print(trainDF)
     return trainDF, inputsCol, outputCol
+
+def lotShapeValueConversion(x):
+    if x == 'Reg':
+        return 1.0
+    elif x == 'IR1':
+        return 0.66
+    elif x == 'IR2':
+        return 0.33
+    elif x == 'IR3':
+        return 0.0
 
 def nominalValueConversion(x):  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
      if x == 'Ex':
@@ -102,7 +112,7 @@ def manageNAValues(inputDF, inputCols):
 def preprocess(targetDF, sourceDF, inputsCol):
 
     nominalDataCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
-                      'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
+                      'Alley','LotShape', 'LandContour', 'Utilities', 'LotConfig',
                       'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
                       'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
                       'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
@@ -125,6 +135,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
     #targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     targetDF.loc[:, "BsmtQual"] = targetDF.loc[:, "BsmtQual"].map(lambda x: bsmtQualConversion(x))
     targetDF.loc[:, "PoolQC"] = targetDF.loc[:, "PoolQC"].map(lambda x: poolQCConversion(x))
+    #targetDF.loc[:, "LotShape"] = targetDF.loc[:, "LotShape"].map(lambda x: lotShapeValueConversion(x))
     # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
 
