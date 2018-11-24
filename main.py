@@ -25,8 +25,8 @@ def readData():
        'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
        'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
        'SaleCondition'] # I think we should drop Utilities because all the values are same except for one but the result is better with Utilities
-    outputCol = ['SalePrice']
-    trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + outputCol)
+    outputCol = 'SalePrice'
+    trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + [outputCol])
     #print(trainDF)
     return trainDF, inputsCol, outputCol
 
@@ -101,7 +101,7 @@ def encodeNominalData(inputDF, inputCols):
         inputDF.loc[:,inputCols[i]] = labelEncoder.transform(inputDF.loc[:,inputCols[i]])
         
 def manageNAValues(inputDF, inputCols):
-    
+    inputDF.loc[:,'LotFrontage'] = inputDF.loc[:,'LotFrontage'].fillna(0)
     #First, deal with columns where "NA" actually means something
     significantNAFields = ["Alley","BsmtQual","BsmtCond","BsmtExposure","BsmtFinType1",
                            "FireplaceQu","GarageType","GarageFinish","GarageQual","GarageCond",
@@ -143,7 +143,9 @@ def preprocess(targetDF, sourceDF, inputsCol):
     - operation of lists
     https://stackoverflow.com/questions/3428536/python-list-subtraction-operation 
     """
-    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence']))
+    # numericDataCols = ['LotFrontage','LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr' ,'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']
+    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence'])) # - set(numericDataCols)
+
     encodeNominalData(targetDF, nominalDataCol)
     targetDF.loc[:, exConversionCols] = targetDF.loc[:,exConversionCols].applymap(lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     #targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
@@ -155,30 +157,47 @@ def preprocess(targetDF, sourceDF, inputsCol):
     #standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
-    #print(targetDF)
 
 def visualization(df, inputsCol, outputCol):
+    print('Visualization begins')
     # testCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea']
     # sns.distplot(df.loc[:, outputCol])
     # sns.pairplot(df.loc[:10, testCol + outputCol])
     # sns.pairplot(df.loc[0:5, ['MSSubClass', 'MSZoning', 'SalePrice']])
     for col in inputsCol:
-        sns.jointplot('SalePrice', col, df)
-        # sns.lmplot('SalePrice', col, df)
-    plt.show()
+        # sns.jointplot('SalePrice', col, df)
+        # sns.lmplot('SalePrice', col, df)  # draws a line in the graph, I did not see the use
+        sns.catplot(x=outputCol, y=col, data=df)  # takes too much time to run
+        # sns.swarmplot(x=outputCol, y=col, data=df)    # similar to jointplot but it spreads the points depending on the number of items for each value
+        # sns.scatterplot(x=outputCol, y=col, data=df)    # scatterplot does not require values to be numerical so it is good for analysis
+        plt.show()
     # sns.jointplot(['PoolQC'], outputCol, df)
     # sns.jointplot(inputsCol, outputCol, df)
+    print("visualization finished")
+
+def convertNominalValue(trainDF, outputSeries, inputCols):
+    exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
+    """
+    - operation of lists
+    https://stackoverflow.com/questions/3428536/python-list-subtraction-operation 
+    """
+    nominalDataCol = list(set(inputCols) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence']))
+    trainDF.loc[:, 'SalePrice'] = outputSeries
+    # inputCols = inputCols -
 
 
 
 def main():
     trainDF, inputsCol, outputCol = readData()
+    outputSeries = (trainDF.loc[:, outputCol] - trainDF.loc[:, outputCol].min()) / (
+            trainDF.loc[:, outputCol].max() - trainDF.loc[:, outputCol].min())
+    # convertNominalValue(trainDF, outputSeries, inputsCol)
     manageNAValues(trainDF, inputsCol)
     preprocess(trainDF, trainDF, inputsCol)
-    # alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
-    # cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    # print(np.mean(cvScores))
-    visualization(trainDF,inputsCol,outputCol)
-
+    # print(trainDF)
+    alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
+    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
+    print(np.mean(cvScores))
+    # visualization(trainDF,inputsCol,outputCol)
 
 main()
