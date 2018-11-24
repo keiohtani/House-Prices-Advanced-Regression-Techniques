@@ -195,24 +195,21 @@ def visualization(df, inputsCol, outputCol):
         plt.show()
     print("visualization finished")
 
-def convertNominalValue(trainDF, inputCols, outputCol):
-    trainDF.loc[:, outputCol] = trainDF.loc[:, 'SalePrice']
+def convertNominalValue(sourceDF, inputCols, outputCol):
+    sourceDF.loc[:, outputCol] = sourceDF.loc[:, 'SalePrice']
     print('Conversion begins')
-    colName = 'MSSubClass'  # each column fx. MSSubClass
-    aveSeries = trainDF.loc[:, [colName, outputCol]].groupby([colName]).median()
-    print(aveSeries)
-    print(type(aveSeries.iloc[:, 0]))
-    print(aveSeries.iloc[:, 0])
-    print(aveSeries.label)
-    colSeries = trainDF.loc[:, colName]
-    trainDF.loc[:, colName] = trainDF.loc[:, colName].index.map(lambda i: aveSeries.loc[trainDF.loc[:, colName].iloc[i]])
-    # for col in inputCols:
-    #     # col = 'MSSubClass'  # each column fx. MSSubClass
-    #     aveSeries = trainDF.loc[:, [col, outputCol]].groupby([col]).median()
-    #     colSeries = trainDF.loc[:, col]
-    #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
+    for colName in inputCols:
+    # colName = 'MSSubClass'  # each column fx. MSSubClass
+        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby([colName]).median()
+        aveSeries = aveDF.iloc[:, 0]
+        colSeries = sourceDF.loc[:, colName]
+        sourceDF.loc[:, colName] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
+        # for col in inputCols:
+        #     # col = 'MSSubClass'  # each column fx. MSSubClass
+        #     aveSeries = trainDF.loc[:, [col, outputCol]].groupby([col]).median()
+        #     colSeries = trainDF.loc[:, col]
+        #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
     print('Conversion ended')
-    print(trainDF)
 
 
 
