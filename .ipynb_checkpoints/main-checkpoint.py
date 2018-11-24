@@ -4,8 +4,6 @@ from sklearn.ensemble import GradientBoostingRegressor
 from sklearn import model_selection
 import numpy as np
 import seaborn as sns
-import matplotlib.pyplot as plt
-
 
 def readData():
     inputsCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
@@ -157,28 +155,19 @@ def preprocess(targetDF, sourceDF, inputsCol):
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
     #print(targetDF)
 
-def visualization(df, inputsCol, outputCol):
-    # testCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea']
-    # sns.distplot(df.loc[:, outputCol])
-    # sns.pairplot(df.loc[:10, testCol + outputCol])
-    # sns.pairplot(df.loc[0:5, ['MSSubClass', 'MSZoning', 'SalePrice']])
-    for col in inputsCol:
-        sns.jointplot('SalePrice', col, df)
-        # sns.lmplot('SalePrice', col, df)
-    plt.show()
-    # sns.jointplot(['PoolQC'], outputCol, df)
-    # sns.jointplot(inputsCol, outputCol, df)
-
 
 
 def main():
     trainDF, inputsCol, outputCol = readData()
     manageNAValues(trainDF, inputsCol)
     preprocess(trainDF, trainDF, inputsCol)
-    # alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
-    # cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    # print(np.mean(cvScores))
-    visualization(trainDF,inputsCol,outputCol)
-
+    alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run.
+    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
+    print(np.mean(cvScores))
+    #print(trainDF.loc[0:10, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond",
+    #                 "PoolQC"]])
+    #print(trainDF.loc[0:10,:])
+    #sns.pairplot(trainDF, hue=outputCol)
+    sns.pairplot(trainDF.loc[:, 'MoSold':'SalePrice'])
 
 main()
