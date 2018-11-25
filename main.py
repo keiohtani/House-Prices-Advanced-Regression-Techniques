@@ -8,6 +8,20 @@ from sklearn import model_selection
 pd.set_option('display.max_row', 1000)
 pd.set_option('display.max_columns', 80)
 
+"""
+readData
+
+Parameters:
+    None
+
+Return:
+    - trainDF = DataFrame corresponding with input data values for model training
+    - inputsCol = list of input columns (features)
+    - outputCol = name of class variable column
+    
+Description:
+    Reads data in from provided csv file and organizes data for data analysis and model training
+"""
 def readData():
     inputsCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
        'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
@@ -30,6 +44,18 @@ def readData():
     trainDF = pd.read_csv("data/train.csv", usecols = inputsCol + [outputCol])
     return trainDF, inputsCol, outputCol
 
+"""
+Various conversion functions
+
+Parameters:
+    x = data value provided by caller algorithm (value to be converted)
+
+Return:
+    Returns a constant value based on the function and the formal parameter
+    
+Description:
+    Converts nominal data into standardized numeric data
+"""
 def masVnrTypeConversion(x):    # https://www.angieslist.com/articles/how-much-does-brick-veneer-cost.htm
     if x == 'BrkCmn':
         return 15
@@ -104,6 +130,19 @@ def poolQCConversion(x):    # there is no poor for pool
     else:
         return x
 
+"""
+normalization and standardization
+
+Parameters:
+    - targetDF, df = the DataFrame on which the function operates
+    - columns = the columns in which data values are to be normalized/standardized
+
+Return:
+    None
+    
+Description:
+    Normalizes/standardizes numeric data in a DataFrame provided by the caller function
+"""
 def normalization(targetDF, columns):
     targetDF.loc[:, columns] = (targetDF.loc[:, columns] - targetDF.loc[:, columns].min()) / (targetDF.loc[:, columns].max() - targetDF.loc[:, columns].min())
 
@@ -111,10 +150,20 @@ def standardize(df, columns):
     df.loc[:,columns] = (df.loc[:,columns] - df.loc[:,columns].mean()) / df.loc[:,columns].std()
 
 """
-Generic numerical encoder for string values ('a' = 0, 'b' = 1, so on - nothing special)
+encodeNominalData
+
+Parameters:
+    - inputDF = the DataFrame on which the function operates
+    - inputCols = the columns in which data are to be encoded
+
+Return:
+    None
+    
+Description:
+    Blindly converts nominal data into numeric data (e.g., first data point = 0, second = 1, and so on)
+
 Original code, based on https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
 """
-
 def encodeNominalData(inputDF, inputCols):
     reps = len(inputCols)
     for i in range(reps):
@@ -123,6 +172,24 @@ def encodeNominalData(inputDF, inputCols):
         labelEncoder.fit(inputDF.loc[:,inputCols[i]])
         inputDF.loc[:,inputCols[i]] = labelEncoder.transform(inputDF.loc[:,inputCols[i]])
         
+"""
+manageNAValues
+
+Parameters:
+    - targetDF = the DataFrame on which the function operates
+    - columns = the columns in which data values are to be converted
+
+Return:
+    None
+    
+Description:
+    Fills all "NA" values in the DataFrame:
+        If "NA" is significant, it becomes "NoValue" and is then processed by the encoder
+        If "NA" is not significant, it becomes the mode of elements in the DataFrame
+        If "NA" means something doesn't exist, it converts to a value of 0.
+        
+        TODO:Make sure all 0 values are accounted for
+"""
 def manageNAValues(inputDF, inputCols):
     inputDF.loc[:,'LotFrontage'] = inputDF.loc[:,'LotFrontage'].fillna(0)
     #First, deal with columns where "NA" actually means something
@@ -136,6 +203,20 @@ def manageNAValues(inputDF, inputCols):
     for column in inputCols:
         inputDF.loc[:,column] = inputDF.loc[:,column].fillna(inputDF.loc[:,column].mode()[0])
 
+"""
+preprocess
+
+Parameters:
+    - targetDF = the DataFrame on which the function operates
+    - sourceDF = ?
+    - inputsCol = the columns in which data values are to be edited
+
+Return:
+    None
+    
+Description:
+    ???
+"""
 def preprocess(targetDF, sourceDF, inputsCol):
     outputCol = 'SalePrice'
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
@@ -193,6 +274,21 @@ def visualization(df, inputsCol, outputCol):
         plt.show()
     print("visualization finished")
 
+"""
+convertNominalValue
+
+Parameters:
+    - targetDF = the DataFrame on which the function operates
+    - sourceDF = ?
+    - inputCols = the columns in which data values are to be edited
+    - outputCol = ?
+
+Return:
+    None
+    
+Description:
+    ???
+"""
 def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
     for colName in inputCols:
@@ -209,6 +305,9 @@ def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
         #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
     print('Conversion ended')
 
+"""
+???
+"""
 def mainTest():
     numericDataCols = ['LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
                        'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
@@ -229,6 +328,18 @@ def mainTest():
         print(np.mean(cvScores))
     # visualization(trainDF,inputsCol,outputCol)
 
+"""
+main
+
+Parameters:
+    None
+
+Return:
+    None
+    
+Description:
+    Main body of the program
+"""
 def main():
     trainDF, inputsCol, outputCol = readData()
     manageNAValues(trainDF, inputsCol)
@@ -236,6 +347,6 @@ def main():
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print(np.mean(cvScores))
-    # visualization(trainDF,inputsCol,outputCol)
+    #visualization(trainDF,inputsCol,outputCol)
 
 main()
