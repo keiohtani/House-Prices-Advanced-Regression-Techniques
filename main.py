@@ -1,12 +1,11 @@
 import pandas as pd
-from sklearn import preprocessing
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn import model_selection
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn import model_selection
 pd.set_option('display.max_row', 1000)
-
 pd.set_option('display.max_columns', 80)
 
 def readData():
@@ -26,11 +25,34 @@ def readData():
        'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
        'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
        'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
-       'SaleCondition'] # I think we should drop Utilities because all the values are same except for one but the result is better with Utilities
+       'SaleCondition'] # We may want to drop Utilities because all the values are same except for one but the result is better with Utilities
     outputCol = 'SalePrice'
-    trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + [outputCol])
-    #print(trainDF)
+    trainDF = pd.read_csv("data/train.csv", usecols = inputsCol + [outputCol])
     return trainDF, inputsCol, outputCol
+
+def masVnrTypeConversion(x):    # https://www.angieslist.com/articles/how-much-does-brick-veneer-cost.htm
+    if x == 'BrkCmn':
+        return 15
+    elif x == 'BrkFace':
+        return 6
+    elif x == 'CBlock':
+        return 3
+    elif x == 'None':
+        return 0
+    elif x == 'Stone':
+        return 30
+
+def fenceValueConversion(x):
+    if x == 'GdPrv':
+        return 1
+    elif x == 'MnPrv':
+        return 0.5
+    elif x == 'GdWo':
+        return 0.75
+    elif x == 'MnWw':
+        return 0.25
+    elif x == 'NA':
+        return 0
 
 def lotShapeValueConversion(x):
     if x == 'Reg':
@@ -114,30 +136,6 @@ def manageNAValues(inputDF, inputCols):
     for column in inputCols:
         inputDF.loc[:,column] = inputDF.loc[:,column].fillna(inputDF.loc[:,column].mode()[0])
 
-def masVnrTypeConversion(x):    # https://www.angieslist.com/articles/how-much-does-brick-veneer-cost.htm
-    if x == 'BrkCmn':
-        return 15
-    elif x == 'BrkFace':
-        return 6
-    elif x == 'CBlock':
-        return 3
-    elif x == 'None':
-        return 0
-    elif x == 'Stone':
-        return 30
-
-def fenceValueConversion(x):
-    if x == 'GdPrv':
-        return 1
-    elif x == 'MnPrv':
-        return 0.5
-    elif x == 'GdWo':
-        return 0.75
-    elif x == 'MnWw':
-        return 0.25
-    elif x == 'NA':
-        return 0
-
 def preprocess(targetDF, sourceDF, inputsCol):
     outputCol = 'SalePrice'
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
@@ -150,7 +148,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
     # convertNominalValue(trainDF, outputSeries, inputsCol)
     nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea'])) # - set(numericDataCols)
 
-    convertNominalValue(targetDF, nominalDataCol, outputCol)
+    convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
     # encodeNominalData(targetDF, nominalDataCol)
     targetDF.loc[:, exConversionCols] = targetDF.loc[:,exConversionCols].applymap(lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     #targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
@@ -162,28 +160,28 @@ def preprocess(targetDF, sourceDF, inputsCol):
     #standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
-#
-# def preprocess(targetDF, sourceDF, inputsCol, col):     # test function to see the difference between different value to be encoded.
-#     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual",
-#                         "GarageCond"]
-#     """
-#     - operation of lists
-#     https://stackoverflow.com/questions/3428536/python-list-subtraction-operation
-#     """
-#     print(col)
-#     nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', col]))  # - set(numericDataCols)
-#     encodeNominalData(targetDF, nominalDataCol)
-#     targetDF.loc[:, exConversionCols] = targetDF.loc[:, exConversionCols].applymap(lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
-#     # targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
-#     targetDF.loc[:, "BsmtQual"] = targetDF.loc[:, "BsmtQual"].map(lambda x: bsmtQualConversion(x))
-#     targetDF.loc[:, "PoolQC"] = targetDF.loc[:, "PoolQC"].map(lambda x: poolQCConversion(x))
-#     targetDF.loc[:, 'MasVnrType'] = targetDF.loc[:, 'MasVnrType'].map(lambda x: masVnrTypeConversion(x))
-#     targetDF.loc[:, 'Fence'] = targetDF.loc[:, 'Fence'].map(lambda x: fenceValueConversion(x))
-#     # targetDF.loc[:, "LotShape"] = targetDF.loc[:, "LotShape"].map(lambda x: lotShapeValueConversion(x))
-#     # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
-#     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
-#     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
-
+"""
+def preprocess(targetDF, sourceDF, inputsCol, col):     # test function to see the difference between different value to be encoded.
+    exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual",
+                        "GarageCond"]
+    \"""
+    - operation of lists
+    https://stackoverflow.com/questions/3428536/python-list-subtraction-operation
+    \"""
+    print(col)
+    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', col]))  # - set(numericDataCols)
+    encodeNominalData(targetDF, nominalDataCol)
+    targetDF.loc[:, exConversionCols] = targetDF.loc[:, exConversionCols].applymap(lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
+    # targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
+    targetDF.loc[:, "BsmtQual"] = targetDF.loc[:, "BsmtQual"].map(lambda x: bsmtQualConversion(x))
+    targetDF.loc[:, "PoolQC"] = targetDF.loc[:, "PoolQC"].map(lambda x: poolQCConversion(x))
+    targetDF.loc[:, 'MasVnrType'] = targetDF.loc[:, 'MasVnrType'].map(lambda x: masVnrTypeConversion(x))
+    targetDF.loc[:, 'Fence'] = targetDF.loc[:, 'Fence'].map(lambda x: fenceValueConversion(x))
+    # targetDF.loc[:, "LotShape"] = targetDF.loc[:, "LotShape"].map(lambda x: lotShapeValueConversion(x))
+    # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
+    normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
+    # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
+"""
 def visualization(df, inputsCol, outputCol):
     print('Visualization begins')
     for col in inputsCol:
@@ -195,23 +193,21 @@ def visualization(df, inputsCol, outputCol):
         plt.show()
     print("visualization finished")
 
-def convertNominalValue(sourceDF, inputCols, outputCol):
-    sourceDF.loc[:, outputCol] = sourceDF.loc[:, 'SalePrice']
+def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
     for colName in inputCols:
     # colName = 'MSSubClass'  # each column fx. MSSubClass
-        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby([colName]).median()
+        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby([colName]).median()   # returns DataFrame somehow so needs to be converted to Series
+        # TODO: though accuracy is better with median, it may need to be adjusted depending on the distribution
         aveSeries = aveDF.iloc[:, 0]
-        colSeries = sourceDF.loc[:, colName]
-        sourceDF.loc[:, colName] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
+        colSeries = targetDF.loc[:, colName]
+        targetDF.loc[:, colName] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
         # for col in inputCols:
         #     # col = 'MSSubClass'  # each column fx. MSSubClass
         #     aveSeries = trainDF.loc[:, [col, outputCol]].groupby([col]).median()
         #     colSeries = trainDF.loc[:, col]
         #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
     print('Conversion ended')
-
-
 
 def mainTest():
     numericDataCols = ['LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
@@ -237,7 +233,6 @@ def main():
     trainDF, inputsCol, outputCol = readData()
     manageNAValues(trainDF, inputsCol)
     preprocess(trainDF, trainDF, inputsCol)
-    print(trainDF)
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print(np.mean(cvScores))
