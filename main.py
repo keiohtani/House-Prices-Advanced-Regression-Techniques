@@ -266,12 +266,12 @@ def preprocess(targetDF, sourceDF, inputsCol, col):     # test function to see t
 def visualization(df, inputsCol, outputCol):
     print('Visualization begins')
     for col in inputsCol:
-        # sns.jointplot('SalePrice', col, df)
+        sns.jointplot('SalePrice', col, df)
         # sns.lmplot('SalePrice', col, df)  # draws a line in the graph, I did not see the use
-        sns.catplot(x=outputCol, y=col, data=df)  # takes too much time to run
+        # sns.catplot(x=outputCol, y=col, data=df)  # takes too much time to run
         # sns.swarmplot(x=outputCol, y=col, data=df)    # similar to jointplot but it spreads the points depending on the number of items for each value
         # sns.scatterplot(x=outputCol, y=col, data=df)    # scatterplot does not require values to be numerical so it is good for analysis
-        plt.show()
+    plt.show()
     print("visualization finished")
 
 """
@@ -347,6 +347,6 @@ def main():
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print(np.mean(cvScores))
-    #visualization(trainDF,inputsCol,outputCol)
+    visualization(trainDF,inputsCol,outputCol)
 
 main()

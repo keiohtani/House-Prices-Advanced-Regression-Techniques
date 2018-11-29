@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="b83d5b2a-1655-4189-a560-e250227cd3ab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataTypes_DMLecture.pdf.zip" beforeDir="false" afterPath="$PROJECT_DIR$/DataTypes_DMLecture.pdf.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,35 +20,22 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/sklearn/ensemble/gradient_boosting.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20325">
-              <caret line="1394" selection-start-line="1394" selection-end-line="1394" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/sklearn/model_selection/_validation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7785">
-              <caret line="541" selection-start-line="541" selection-end-line="541" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/computation/expressions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="885">
-              <caret line="64" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="330">
+              <caret line="261" column="36" lean-forward="true" selection-start-line="261" selection-start-column="36" selection-end-line="261" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#2135#2416#1" expanded="true" />
+                <element signature="e#3557#3768#0" expanded="true" />
+                <element signature="e#3830#4008#0" expanded="true" />
+                <element signature="e#4010#4337#1" expanded="true" />
+                <element signature="e#4664#5080#1" expanded="true" />
+                <element signature="e#5128#5401#0" expanded="true" />
+                <element signature="e#5411#5971#1" expanded="true" />
+                <element signature="e#6016#6737#0" expanded="true" />
+                <element signature="e#6739#6963#1" expanded="true" />
+                <element signature="e#7015#9359#0" expanded="true" />
+                <element signature="e#11633#12251#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,7 +44,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>norma</find>
       <find>normali</find>
       <find>nor</find>
       <find>stan</find>
@@ -86,6 +73,7 @@
       <find>LotFr</find>
       <find>Bsmt</find>
       <find>print</find>
+      <find>visua</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -102,43 +90,16 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="720" />
     <option name="y" value="23" />
-    <option name="width" value="1440" />
+    <option name="width" value="720" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="DMFinalProject" type="b2602c69:ProjectViewProjectNode" />
-              <item name="DMFinalProject" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DMFinalProject" type="b2602c69:ProjectViewProjectNode" />
-              <item name="DMFinalProject" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="DMFinalProject" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -267,7 +228,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="0" />
+    <frame x="720" y="23" width="720" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.24876674" />
@@ -283,7 +244,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32356688" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.3299363" />
-      <window_info active="true" anchor="bottom" id="Run" order="10" visible="true" weight="0.20382166" />
+      <window_info anchor="bottom" id="Run" order="10" weight="0.20382166" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -368,13 +329,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/sklearn/ensemble/gradient_boosting.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20325">
@@ -393,6 +347,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="885">
           <caret line="64" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="261" column="36" lean-forward="true" selection-start-line="261" selection-start-column="36" selection-end-line="261" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#2135#2416#1" expanded="true" />
+            <element signature="e#3557#3768#0" expanded="true" />
+            <element signature="e#3830#4008#0" expanded="true" />
+            <element signature="e#4010#4337#1" expanded="true" />
+            <element signature="e#4664#5080#1" expanded="true" />
+            <element signature="e#5128#5401#0" expanded="true" />
+            <element signature="e#5411#5971#1" expanded="true" />
+            <element signature="e#6016#6737#0" expanded="true" />
+            <element signature="e#6739#6963#1" expanded="true" />
+            <element signature="e#7015#9359#0" expanded="true" />
+            <element signature="e#11633#12251#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
