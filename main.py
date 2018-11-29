@@ -164,6 +164,7 @@ Description:
 
 Original code, based on https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
 """
+"""
 def encodeNominalData(inputDF, inputCols):
     reps = len(inputCols)
     for i in range(reps):
@@ -171,7 +172,8 @@ def encodeNominalData(inputDF, inputCols):
         labelEncoder = preprocessing.LabelEncoder()
         labelEncoder.fit(inputDF.loc[:,inputCols[i]])
         inputDF.loc[:,inputCols[i]] = labelEncoder.transform(inputDF.loc[:,inputCols[i]])
-        
+"""
+
 """
 manageNAValues
 
@@ -208,14 +210,14 @@ preprocess
 
 Parameters:
     - targetDF = the DataFrame on which the function operates
-    - sourceDF = ?
+    - sourceDF = the training DataFrame
     - inputsCol = the columns in which data values are to be edited
 
 Return:
     None
     
 Description:
-    ???
+    An aggregate function for all preprocessing function calls (to avoid multiple calls in main)
 """
 def preprocess(targetDF, sourceDF, inputsCol):
     outputCol = 'SalePrice'
@@ -279,15 +281,15 @@ convertNominalValue
 
 Parameters:
     - targetDF = the DataFrame on which the function operates
-    - sourceDF = ?
+    - sourceDF = the training DataFrame
     - inputCols = the columns in which data values are to be edited
-    - outputCol = ?
+    - outputCol = the class variable column designation
 
 Return:
     None
     
 Description:
-    ???
+    Encodes data values based on the median price of all houses with that value
 """
 def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
@@ -306,7 +308,8 @@ def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion ended')
 
 """
-???
+Test function only
+"""
 """
 def mainTest():
     numericDataCols = ['LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
@@ -327,6 +330,7 @@ def mainTest():
         cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
         print(np.mean(cvScores))
     # visualization(trainDF,inputsCol,outputCol)
+"""
 
 """
 main
