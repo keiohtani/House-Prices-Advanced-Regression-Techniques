@@ -244,8 +244,6 @@ def testPreprocess(targetDF, sourceDF, inputsCol, col):     # test function to s
 
 
 
-
-
 """
 convertNominalValue
 

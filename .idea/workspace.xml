@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b83d5b2a-1655-4189-a560-e250227cd3ab" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/preprocessing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reading.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/visualization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reading.py" beforeDir="false" afterPath="$PROJECT_DIR$/reading.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,18 +16,24 @@
     <favorites_list name="DMFinalProject" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="3" lean-forward="true" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
+            <state relative-caret-position="210">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="64" selection-end-column="38" />
               <folding>
-                <element signature="e#1#19#0" expanded="true" />
-                <element signature="e#216#1600#0" expanded="true" />
-                <element signature="e#14735#14834#1" expanded="true" />
-                <element signature="e#14851#15304#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/indexing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="149">
+              <caret line="1784" selection-start-line="1784" selection-end-line="1784" />
             </state>
           </provider>
         </entry>
@@ -41,7 +45,6 @@
               <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <element signature="e#49#667#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -50,12 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/reading.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
-              <folding>
-                <element signature="e#21#360#1" expanded="true" />
-                <element signature="e#361#1831#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="525">
+              <caret line="35" column="73" lean-forward="true" selection-start-line="35" selection-start-column="73" selection-end-line="35" selection-end-column="73" />
             </state>
           </provider>
         </entry>
@@ -63,28 +62,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocessing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="242" column="68" lean-forward="true" selection-start-line="224" selection-start-column="6" selection-end-line="242" selection-end-column="68" />
-              <folding>
-                <element signature="e#35#312#1" expanded="true" />
-                <element signature="e#389#587#0" expanded="true" />
-                <element signature="e#622#818#0" expanded="true" />
-                <element signature="e#856#1011#0" expanded="true" />
-                <element signature="e#1118#1345#0" expanded="true" />
-                <element signature="e#1419#1630#0" expanded="true" />
-                <element signature="e#1692#1870#0" expanded="true" />
-                <element signature="e#1872#2195#1" expanded="true" />
-                <element signature="e#2238#2392#0" expanded="true" />
-                <element signature="e#2428#2520#0" expanded="true" />
-                <element signature="e#2522#2934#1" expanded="true" />
-                <element signature="e#2935#3263#1" expanded="true" />
-                <element signature="e#3265#3813#1" expanded="true" />
-                <element signature="e#3858#4575#0" expanded="true" />
-                <element signature="e#4577#4907#1" expanded="true" />
-                <element signature="e#5004#7378#0" expanded="true" />
-                <element signature="e#9769#10147#1" expanded="true" />
-                <element signature="e#10219#11130#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="178">
+              <caret line="197" column="21" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -100,9 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>stan</find>
-      <find>Utilities</find>
-      <find>LotShape</find>
       <find>time</find>
       <find>sns</find>
       <find>mis</find>
@@ -130,6 +106,9 @@
       <find>visua</find>
       <find>fit</find>
       <find>preprocess</find>
+      <find>sale</find>
+      <find>main</find>
+      <find>ScreenProch</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -145,14 +124,15 @@
         <option value="$PROJECT_DIR$/read.py" />
         <option value="$PROJECT_DIR$/visualization.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/reading.py" />
         <option value="$PROJECT_DIR$/preprocessing.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="1440" />
+    <option name="width" value="720" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
@@ -160,7 +140,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -172,6 +151,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -301,10 +281,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="877" extended-state="6" />
+    <frame x="0" y="23" width="720" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1564482" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.1564482" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24947146" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.32980973" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -317,7 +297,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32356688" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="9" weight="0.3299363" />
-      <window_info anchor="bottom" id="Run" order="10" weight="0.20382166" />
+      <window_info active="true" anchor="bottom" id="Run" order="10" visible="true" weight="0.3987261" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -423,67 +403,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/reading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
-          <folding>
-            <element signature="e#21#360#1" expanded="true" />
-            <element signature="e#361#1831#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py" />
     <entry file="file://$PROJECT_DIR$/visualization.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#49#667#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/indexing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="1784" selection-start-line="1784" selection-end-line="1784" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="242" column="68" lean-forward="true" selection-start-line="224" selection-start-column="6" selection-end-line="242" selection-end-column="68" />
-          <folding>
-            <element signature="e#35#312#1" expanded="true" />
-            <element signature="e#389#587#0" expanded="true" />
-            <element signature="e#622#818#0" expanded="true" />
-            <element signature="e#856#1011#0" expanded="true" />
-            <element signature="e#1118#1345#0" expanded="true" />
-            <element signature="e#1419#1630#0" expanded="true" />
-            <element signature="e#1692#1870#0" expanded="true" />
-            <element signature="e#1872#2195#1" expanded="true" />
-            <element signature="e#2238#2392#0" expanded="true" />
-            <element signature="e#2428#2520#0" expanded="true" />
-            <element signature="e#2522#2934#1" expanded="true" />
-            <element signature="e#2935#3263#1" expanded="true" />
-            <element signature="e#3265#3813#1" expanded="true" />
-            <element signature="e#3858#4575#0" expanded="true" />
-            <element signature="e#4577#4907#1" expanded="true" />
-            <element signature="e#5004#7378#0" expanded="true" />
-            <element signature="e#9769#10147#1" expanded="true" />
-            <element signature="e#10219#11130#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="178">
+          <caret line="197" column="21" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="73" lean-forward="true" selection-start-line="35" selection-start-column="73" selection-end-line="35" selection-end-column="73" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="3" lean-forward="true" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
+        <state relative-caret-position="210">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="64" selection-end-column="38" />
           <folding>
-            <element signature="e#1#19#0" expanded="true" />
-            <element signature="e#216#1600#0" expanded="true" />
-            <element signature="e#14735#14834#1" expanded="true" />
-            <element signature="e#14851#15304#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

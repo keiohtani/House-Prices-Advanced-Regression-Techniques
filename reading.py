@@ -38,5 +38,5 @@ def readData():
                  'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
                  'SaleCondition']  # We may want to drop Utilities because all the values are same except for one but the result is better with Utilities
     outputCol = 'SalePrice'
-    trainDF = pd.read_csv("data/train.csv", usecols=inputsCol + [outputCol])
+    trainDF = pd.read_csv("data/train.csv", usecols = inputsCol + [outputCol])
     return trainDF, inputsCol, outputCol
