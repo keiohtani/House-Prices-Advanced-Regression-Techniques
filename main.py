@@ -40,16 +40,15 @@ def mainTest():
     numericDataCols = ["HalfBath", "LandSlope","BldgType","YearBuilt","LowQualFinSF","Utilities","1stFlrSF",
                          "GarageCond","ScreenPorch","OpenPorchSF","EnclosedPorch"]
     trainDF, inputsCol, outputCol = reading.readData()
-    preprocessing.manageNAValues(trainDF, inputsCol)
     preprocessing.preprocess(trainDF, trainDF, inputsCol)
     alg = GradientBoostingRegressor(
         random_state=1)  # accuracy does not change everytime it is run with set random_state
-    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10,
-                                               scoring='r2')
+    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     score = Score(np.mean(cvScores), 'Original')
     scoreList.append(score)
     for col in numericDataCols:
         inputsCol.remove(col);
+        print(inputsCol)
         trainDF = trainDF.loc[:, inputsCol + [outputCol]];
         alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
         cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
@@ -89,8 +88,8 @@ def main():
 
 
     # inputsColTemp = copy.deepcopy(inputsCol)
-    temp = {}
-    temp["Nothing removed"] = np.mean(cvScores)
+    # temp = {}
+    # temp["Nothing removed"] = np.mean(cvScores)
     # while len(inputsColTemp) != 0:
     #     featureRemoved = inputsColTemp.pop()
     #     inputsCol.remove(featureRemoved)
@@ -109,12 +108,17 @@ def main():
     # without ["HalfBath", "LandSlope"] 0.968366504937428
     # without ["HalfBath"] 0.968366504937428
     # TODO It seems even when deleting one column improves the result, removing the multiple columns worsen the accuracy
-    itemsToRemove = set(["HalfBath", "LandSlope", "BldgType"])  # changed to ScreenPorch from ScreenProch
+
+    itemsToRemove = set(["HalfBath"])  # changed to ScreenPorch from ScreenProch
+    # TODO Why does the result different from the result in the while loop above? This should match up with the accuracy 0.97021332160605. Does the order of list matter??
+
     post_featureRemoval = filter(lambda x: x not in itemsToRemove, inputsCol)
+    # post_featureRemoval = list(set(inputsCol) - itemsToRemove)
+    # inputsCol.remove('HalfBath')
     alg = GradientBoostingRegressor(random_state = 1)
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, post_featureRemoval], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("After removing all detrimental features =", np.mean(cvScores))
-    #This results in a lower value... does this mean some of these are related, or simply need preprocessing
+    # This results in a lower value... does this mean some of these are related, or simply need preprocessing
     #   (e.g., year built should probably become age)?
 
     #visualization.visualize(trainDF,inputsCol,outputCol)
