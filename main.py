@@ -46,7 +46,18 @@ def main():
     preprocessing.preprocess(trainDF, trainDF, inputsCol)
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    print(np.mean(cvScores))
+    print("Highest Accuracy with all featuers =", np.mean(cvScores))
+    #visualization(trainDF,inputsCol,outputCol)
+    
+    inputsColTemp = inputsCol
+    while len(inputsColTemp) != 0:
+        featureRemoved = inputsColTemp.pop()
+        inputsCol.remove(featureRemoved)
+        alg = GradientBoostingRegressor(random_state = 1)
+        cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
+        print("Accuracy when removing " + featureRemoved + " =", np.mean(cvScores))
+        inputsCol.append(featureRemoved)
+
     visualization.visualize(trainDF,inputsCol,outputCol)
 >>>>>>> refs/remotes/DMFinalProject/master
 main()
