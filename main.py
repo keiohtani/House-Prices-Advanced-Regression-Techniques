@@ -87,6 +87,7 @@ def main():
 
     #Already done, testing what happens to accuracy removing one feature at a time
 
+
     # inputsColTemp = copy.deepcopy(inputsCol)
     inputsColTemp = set(["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF", "Utilities", "1stFlrSF",
                          "GarageCond", "ScreenPorch", "OpenPorchSF", "EnclosedPorch"])
@@ -102,8 +103,10 @@ def main():
     #     inputsCol.append(featureRemoved)
     # export = pd.Series(temp)
     # export.to_csv(os.getcwd() + '/test.csv')
+
+
     # TODO It seems even when deleting one column improves the result, removing the multiple columns worsen the accuracy
-    itemsToRemove = set(['OpenPorchSF','YearBuilt', 'ScreenPorch', 'LowQualFinSF', '1stFlrSF', 'EnclosedPorch']) # changed to ScreenPorch from ScreenProch
+    itemsToRemove = set(['OpenPorchSF', 'YearBuilt', 'ScreenPorch'])  # changed to ScreenPorch from ScreenProch
     post_featureRemoval = filter(lambda x: x not in itemsToRemove, inputsCol)
     alg = GradientBoostingRegressor(random_state = 1)
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, post_featureRemoval], trainDF.loc[:, outputCol], cv=10, scoring='r2')
