@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b83d5b2a-1655-4189-a560-e250227cd3ab" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="498">
-              <caret line="108" column="83" lean-forward="true" selection-start-line="108" selection-start-column="83" selection-end-line="108" selection-end-column="83" />
+            <state relative-caret-position="468">
+              <caret line="109" column="44" lean-forward="true" selection-start-line="109" selection-start-column="44" selection-end-line="109" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -57,7 +58,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocessing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-429">
+            <state relative-caret-position="2955">
               <caret line="197" column="21" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="21" />
             </state>
           </provider>
@@ -125,9 +126,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
-    <option name="width" value="720" />
+    <option name="width" value="1440" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
@@ -399,6 +400,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py" />
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="109" column="44" lean-forward="true" selection-start-line="109" selection-start-column="44" selection-end-line="109" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/pandas/core/indexing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="26415">
@@ -425,15 +433,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-429">
+        <state relative-caret-position="2955">
           <caret line="197" column="21" selection-start-line="197" selection-start-column="17" selection-end-line="197" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="108" column="83" lean-forward="true" selection-start-line="108" selection-start-column="83" selection-end-line="108" selection-end-column="83" />
         </state>
       </provider>
     </entry>

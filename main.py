@@ -89,8 +89,6 @@ def main():
 
 
     # inputsColTemp = copy.deepcopy(inputsCol)
-    inputsColTemp = set(["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF", "Utilities", "1stFlrSF",
-                         "GarageCond", "ScreenPorch", "OpenPorchSF", "EnclosedPorch"])
     temp = {}
     temp["Nothing removed"] = np.mean(cvScores)
     # while len(inputsColTemp) != 0:
@@ -104,9 +102,14 @@ def main():
     # export = pd.Series(temp)
     # export.to_csv(os.getcwd() + '/test.csv')
 
-
+    # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF", "Utilities"] 0.9697767256899044
+    # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF"] 0.9689720298816091
+    # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt"] 0.9689965270724571
+    # without ["HalfBath", "LandSlope", "BldgType"] 0.9701461139168301
+    # without ["HalfBath", "LandSlope"] 0.968366504937428
+    # without ["HalfBath"] 0.968366504937428
     # TODO It seems even when deleting one column improves the result, removing the multiple columns worsen the accuracy
-    itemsToRemove = set(['OpenPorchSF', 'YearBuilt', 'ScreenPorch'])  # changed to ScreenPorch from ScreenProch
+    itemsToRemove = set(["HalfBath", "LandSlope", "BldgType"])  # changed to ScreenPorch from ScreenProch
     post_featureRemoval = filter(lambda x: x not in itemsToRemove, inputsCol)
     alg = GradientBoostingRegressor(random_state = 1)
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, post_featureRemoval], trainDF.loc[:, outputCol], cv=10, scoring='r2')
