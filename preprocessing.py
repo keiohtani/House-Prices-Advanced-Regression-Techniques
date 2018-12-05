@@ -92,6 +92,9 @@ def poolQCConversion(x):  # there is no poor for pool
         return 0.0
     else:
         return x
+    
+def dateToAgeConversion(x): #Converting data for which the date is supplied to the appropriate age in years
+    return 2018 - x
 
 
 """
@@ -133,7 +136,7 @@ Description:
 
 Original code, based on https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
 """
-"""
+#"""
 def encodeNominalData(inputDF, inputCols):
     reps = len(inputCols)
     for i in range(reps):
@@ -141,7 +144,7 @@ def encodeNominalData(inputDF, inputCols):
         labelEncoder = preprocessing.LabelEncoder()
         labelEncoder.fit(inputDF.loc[:,inputCols[i]])
         inputDF.loc[:,inputCols[i]] = labelEncoder.transform(inputDF.loc[:,inputCols[i]])
-"""
+#"""
 
 """
 manageNAValues
@@ -204,11 +207,14 @@ def preprocess(targetDF, sourceDF, inputsCol):
 
     # outputSeries = (trainDF.loc[:, outputCol] - trainDF.loc[:, outputCol].min()) / (trainDF.loc[:, outputCol].max() - trainDF.loc[:, outputCol].min())
     # convertNominalValue(trainDF, outputSeries, inputsCol)
+    
     nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(
         ['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea']))  # - set(numericDataCols)
 
     convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
-    # encodeNominalData(targetDF, nominalDataCol)
+    #Accuracy with ONLY convertNominalValue applied, including normalization = 0.9684257179045664
+    
+    #encodeNominalData(targetDF, inputsCol) #yields 0.8879956626324738
     targetDF.loc[:, exConversionCols] = targetDF.loc[:, exConversionCols].applymap(
         lambda x: nominalValueConversion(x))  # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
     # targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]] = targetDF.loc[:, ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond", "PoolQC"]].applymap(lambda x: 1.0 if x == 'Ex' else (0.75 if x == 'Gd' else (0.5 if x == 'TA' else (0.25 if x == 'Fa' else (0.0 if x == 'Po' else x)))))    # Ex, Gd, TA, Fa, Po to be numerical value 1.0, 0.75, 0.5, 0.25 0.0
@@ -217,11 +223,12 @@ def preprocess(targetDF, sourceDF, inputsCol):
     targetDF.loc[:, 'MasVnrType'] = targetDF.loc[:, 'MasVnrType'].map(lambda x: masVnrTypeConversion(x))
     targetDF.loc[:, 'Fence'] = targetDF.loc[:, 'Fence'].map(lambda x: fenceValueConversion(x))
     # targetDF.loc[:, "LotShape"] = targetDF.loc[:, "LotShape"].map(lambda x: lotShapeValueConversion(x))
+    targetDF.loc[:, 'YearBuilt'] = targetDF.loc[:, 'YearBuilt'].map(lambda x: dateToAgeConversion(x)) #went from 0.9695631660091774 to 0.9695838362322334
+    #targetDF.loc[:, 'YrSold'] = targetDF.loc[:, 'YrSold'].map(lambda x: dateToAgeConversion(x)) #Results in accuracy decrease
     # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done."""
-
-
+'''
 def testPreprocess(targetDF, sourceDF, inputsCol, col):     # test function to see the difference between different value to be encoded.
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual",
                         "GarageCond"]
@@ -241,8 +248,7 @@ def testPreprocess(targetDF, sourceDF, inputsCol, col):     # test function to s
     # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
     normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done.
-
-
+'''
 
 """
 convertNominalValue

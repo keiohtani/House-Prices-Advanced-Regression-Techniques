@@ -85,8 +85,6 @@ def main():
     #visualization(trainDF,inputsCol,outputCol)
 
     #Already done, testing what happens to accuracy removing one feature at a time
-
-
     # inputsColTemp = copy.deepcopy(inputsCol)
     # temp = {}
     # temp["Nothing removed"] = np.mean(cvScores)
@@ -101,6 +99,7 @@ def main():
     # export = pd.Series(temp)
     # export.to_csv(os.getcwd() + '/test.csv')
 
+    #Testing combinations of removing items
     # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF", "Utilities"] 0.9697767256899044
     # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF"] 0.9689720298816091
     # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt"] 0.9689965270724571
@@ -109,15 +108,16 @@ def main():
     # without ["HalfBath"] 0.968366504937428
     # TODO It seems even when deleting one column improves the result, removing the multiple columns worsen the accuracy
 
-    itemsToRemove = set(["HalfBath"])  # changed to ScreenPorch from ScreenProch
+    #Test function for above accuracies
+    #itemsToRemove = set(["HalfBath"])  # changed to ScreenPorch from ScreenProch
     # TODO Why does the result different from the result in the while loop above? This should match up with the accuracy 0.97021332160605. Does the order of list matter??
 
-    post_featureRemoval = filter(lambda x: x not in itemsToRemove, inputsCol)
+    #post_featureRemoval = filter(lambda x: x not in itemsToRemove, inputsCol)
     # post_featureRemoval = list(set(inputsCol) - itemsToRemove)
     # inputsCol.remove('HalfBath')
-    alg = GradientBoostingRegressor(random_state = 1)
-    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, post_featureRemoval], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    print("After removing all detrimental features =", np.mean(cvScores))
+    #alg = GradientBoostingRegressor(random_state = 1)
+    #cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, post_featureRemoval], trainDF.loc[:, outputCol], cv=10, scoring='r2')
+    #print("After removing all detrimental features =", np.mean(cvScores))
     # This results in a lower value... does this mean some of these are related, or simply need preprocessing
     #   (e.g., year built should probably become age)?
 
