@@ -85,19 +85,19 @@ def main():
     #visualization(trainDF,inputsCol,outputCol)
 
     #Already done, testing what happens to accuracy removing one feature at a time
-    # inputsColTemp = copy.deepcopy(inputsCol)
-    # temp = {}
-    # temp["Nothing removed"] = np.mean(cvScores)
-    # while len(inputsColTemp) != 0:
-    #     featureRemoved = inputsColTemp.pop()
-    #     inputsCol.remove(featureRemoved)
-    #     alg = GradientBoostingRegressor(random_state = 1)
-    #     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    #     temp[featureRemoved] = np.mean(cvScores)
-    #     print("Accuracy when removing " + featureRemoved + " =", np.mean(cvScores))
-    #     inputsCol.append(featureRemoved)
-    # export = pd.Series(temp)
-    # export.to_csv(os.getcwd() + '/test.csv')
+    inputsColTemp = copy.deepcopy(inputsCol)
+    temp = {}
+    temp["Nothing removed"] = np.mean(cvScores)
+    while len(inputsColTemp) != 0:
+        featureRemoved = inputsColTemp.pop()
+        inputsCol.remove(featureRemoved)
+        alg = GradientBoostingRegressor(random_state = 1)
+        cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
+        temp[featureRemoved] = np.mean(cvScores)
+        print("Accuracy when removing " + featureRemoved + " =", np.mean(cvScores))
+        inputsCol.append(featureRemoved)
+    export = pd.Series(temp)
+    export.to_csv(os.getcwd() + '/removeOneFeature_postDateToAgeConversion.csv')
 
     #Testing combinations of removing items
     # without ["HalfBath", "LandSlope", "BldgType", "YearBuilt", "LowQualFinSF", "Utilities"] 0.9697767256899044
