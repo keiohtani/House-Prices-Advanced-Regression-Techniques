@@ -4,6 +4,7 @@ import reading
 import visualization
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn import model_selection
+from sklearn.linear_model import LinearRegression
 import copy
 import pandas as pd
 import os
@@ -120,10 +121,12 @@ def main():
         print("For rate of j = " + str(j) + ":", np.mean(cvScores))
         j += 0.05
     '''
+    """
     print("Testing proposed optimum settings (approximate):")
     alg = GradientBoostingRegressor(random_state = 1, n_estimators = 900, learning_rate = 0.16)
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("Score:", np.mean(cvScores))
+    """
     """
     For score of i = 100: 0.9695838362322334
     For score of i = 200: 0.9713926415403247
@@ -186,5 +189,14 @@ def main():
     #   (e.g., year built should probably become age)?
 
     #visualization.visualize(trainDF,inputsCol,outputCol)
+    
+    #Testing a different model (linear regression)
+    """
+    alg = LinearRegression()
+    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='mean_squared_error')
+    print("Accuracy for linear regression:", np.mean(cvScores))
+    """
+    # This code is suggested to be correct, even though it returns the very high MSE of -3.902505273678058e+32
+    # Supported by https://stackoverflow.com/questions/24132237/scikit-learn-cross-validation-scoring-for-regression
 
 main()
