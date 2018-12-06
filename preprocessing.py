@@ -226,7 +226,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
     targetDF.loc[:, 'YearBuilt'] = targetDF.loc[:, 'YearBuilt'].map(lambda x: dateToAgeConversion(x)) #went from 0.9695631660091774 to 0.9695838362322334
     #targetDF.loc[:, 'YrSold'] = targetDF.loc[:, 'YrSold'].map(lambda x: dateToAgeConversion(x)) #Results in accuracy decrease
     # standardize(targetDF, inputsCol)  # Accuracy 0.8952159968525466
-    normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
+    # normalization(targetDF, inputsCol)  # Accuracy 0.8958124722966672
     # targetDF.loc[:, "YearRemodAdd"] = targetDF.loc[:, ['YearBuilt', "YearRemodAdd"]].apply(lambda row: np.NaN if row.loc['YearBuilt'] == row.loc['YearRemodAdd'] else row.loc['YearRemodAdd'], axis = 1) # remodel year should be adjusted in the case of remodel has not been done."""
 '''
 def testPreprocess(targetDF, sourceDF, inputsCol, col):     # test function to see the difference between different value to be encoded.

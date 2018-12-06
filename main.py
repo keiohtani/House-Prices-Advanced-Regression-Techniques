@@ -55,7 +55,7 @@ def mainTest():
         cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
         score = Score(np.mean(cvScores), col)
         scoreList.append(score)
-    # visualization(trainDF,inputsCol,outputCol)
+    # visualization.visualize(trainDF,inputsCol,outputCol)
     """
     https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
     sorting objects
@@ -83,8 +83,8 @@ def main():
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("Highest Accuracy with all features, default parameterizations =", np.mean(cvScores))
-    #visualization(trainDF,inputsCol,outputCol)
-
+    inputsCol = ['MSSubClass']
+    visualization.visualize(trainDF,inputsCol,outputCol)
     #Already done, testing what happens to accuracy removing one feature at a time
     """
     inputsColTemp = copy.deepcopy(inputsCol)
@@ -199,4 +199,10 @@ def main():
     # This code is suggested to be correct, even though it returns the very high MSE of -3.902505273678058e+32
     # Supported by https://stackoverflow.com/questions/24132237/scikit-learn-cross-validation-scoring-for-regression
 
-main()
+def visualizationTest():
+    trainDF, inputsCol, outputCol = reading.readData()
+    visualization.visualizeScatterplot(trainDF,inputsCol,outputCol)
+
+# main()
+
+visualizationTest()
