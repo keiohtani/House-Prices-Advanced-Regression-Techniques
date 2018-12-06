@@ -83,24 +83,24 @@ def main():
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("Highest Accuracy with all features, default parameterizations =", np.mean(cvScores))
-    inputsCol = ['MSSubClass']
-    visualization.visualize(trainDF,inputsCol,outputCol)
+    #inputsCol = ['MSSubClass']
+    #visualization.visualize(trainDF,inputsCol,outputCol)
     #Already done, testing what happens to accuracy removing one feature at a time
-    """
+    
     inputsColTemp = copy.deepcopy(inputsCol)
     temp = {}
     temp["Nothing removed"] = np.mean(cvScores)
     while len(inputsColTemp) != 0:
         featureRemoved = inputsColTemp.pop()
         inputsCol.remove(featureRemoved)
-        alg = GradientBoostingRegressor(random_state = 1)
+        alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
         cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
         temp[featureRemoved] = np.mean(cvScores)
         print("Accuracy when removing " + featureRemoved + " =", np.mean(cvScores))
         inputsCol.append(featureRemoved)
     export = pd.Series(temp)
-    export.to_csv(os.getcwd() + '/removeOneFeature_postDateToAgeConversion.csv')
-    """
+    export.to_csv(os.getcwd() + '/removeOneFeature_postParameterization.csv')
+    
     
     #Testing various parameterizations
     '''
@@ -203,6 +203,6 @@ def visualizationTest():
     trainDF, inputsCol, outputCol = reading.readData()
     visualization.visualizeScatterplot(trainDF,inputsCol,outputCol)
 
-# main()
+main()
 
-visualizationTest()
+#visualizationTest()
