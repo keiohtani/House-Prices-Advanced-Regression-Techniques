@@ -1,3 +1,3 @@
-Change
-Hi Keisuke, this is Zach
-#DMFinalProject
+#House Prices: Advanced Regression Techniques
+##Introduction
+One  reason  that  machine  learning  algorithms  exist  is  forthe modeling of complex problems. Our work emcompassesa  project  for  a  Data  Mining  course  at  DePauw  Univer-sity. The project itself is based on the Kaggle competition,[House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) in whichcompetitors  are  given  a  data  set  containing  properties  ofrecently-sold houses in Ames, IA, along with their respec-tive sale prices (for detailed information, see Data Descrip-tion section). From these data, we created a regressor modelusing various pre-processing methods and machine learningalgorithm parameterization techniques.
