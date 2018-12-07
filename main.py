@@ -4,7 +4,9 @@ import reading
 import visualization
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn import model_selection
-
+import os
+import pandas as pd
+import copy
 
 """
 main
@@ -23,18 +25,14 @@ def main():
     trainDF, inputsCol, outputCol = reading.readData()
     preprocessing.preprocess(trainDF, trainDF, inputsCol)
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
-    additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
-    inputsCol = inputsCol + additionalCols
-    inputsCol = list(set(inputsCol) - set(['MSSubClass']))
+    # additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
+    # inputsCol = inputsCol + additionalCols
+    # inputsCol = list(set(inputsCol) - set(['MSSubClass']))
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("Highest Accuracy with all features, default parameterizations =", np.mean(cvScores))
-<<<<<<< HEAD
-    inputsCol = additionalCols + [outputCol]
-    visualization.visualize(trainDF, additionalCols, outputCol)
-=======
-    #inputsCol = ['MSSubClass']
+    # inputsCol = additionalCols + [outputCol]
+    # visualization.visualize(trainDF, additionalCols, outputCol)
     #visualization.visualize(trainDF,inputsCol,outputCol)
->>>>>>> 907787d4cf6bad9866ef8ab7d5ae8b01aec767c7
     #Already done, testing what happens to accuracy removing one feature at a time
     
     inputsColTemp = copy.deepcopy(inputsCol)
@@ -154,12 +152,8 @@ def visualizationTest():
     inputsCol = ['MSSubClass']
     visualization.visualizeScatterplot(trainDF,inputsCol,outputCol)
 
-<<<<<<< HEAD
 # visualizationTest()
 
 main()
-=======
-main()
 
 #visualizationTest()
->>>>>>> 907787d4cf6bad9866ef8ab7d5ae8b01aec767c7

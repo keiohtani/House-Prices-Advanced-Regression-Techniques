@@ -255,10 +255,10 @@ Description:
 def preprocess(targetDF, sourceDF, inputsCol):
     manageNAValues(targetDF, inputsCol)
 
-    additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
-    inputsCol = inputsCol + additionalCols
-    for col in additionalCols:
-        targetDF.loc[:, col] = 0
+    # additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
+    # inputsCol = inputsCol + additionalCols
+    # for col in additionalCols:
+    #     targetDF.loc[:, col] = 0
 
     outputCol = 'SalePrice'
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
@@ -268,13 +268,13 @@ def preprocess(targetDF, sourceDF, inputsCol):
     """
 
 
-    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']) - set(additionalCols))  # - set(numericDataCols)
-
+    # nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']) - set(additionalCols))  # - set(numericDataCols)
+    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']))
     convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
     #Accuracy with ONLY convertNominalValue applied, including normalization = 0.9684257179045664
     #encodeNominalData(targetDF, inputsCol) #yields 0.8879956626324738
-    targetDF.loc[:, additionalCols + ['MSSubClass']] = targetDF.loc[:, additionalCols + ['MSSubClass']].apply(lambda row: msSubClassConversion(row), axis = 1)
-    targetDF.drop('MSSubClass', axis = 1)
+    # targetDF.loc[:, additionalCols + ['MSSubClass']] = targetDF.loc[:, additionalCols + ['MSSubClass']].apply(lambda row: msSubClassConversion(row), axis = 1)
+    # targetDF.drop('MSSubClass', axis = 1)
 
     # print(exConversionCols)
     targetDF.loc[:, exConversionCols] = targetDF.loc[:, exConversionCols].applymap(lambda x: nominalValueConversion(x))
@@ -283,7 +283,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
     targetDF.loc[:, 'MasVnrType'] = targetDF.loc[:, 'MasVnrType'].map(lambda x: masVnrTypeConversion(x))
     targetDF.loc[:, 'Fence'] = targetDF.loc[:, 'Fence'].map(lambda x: fenceValueConversion(x))
     targetDF.loc[:, 'YearBuilt'] = targetDF.loc[:, 'YearBuilt'].map(lambda x: dateToAgeConversion(x)) #went from 0.9695631660091774 to 0.9695838362322334
-    inputsCol = list(set(inputsCol) - set(additionalCols))
+    # inputsCol = list(set(inputsCol) - set(additionalCols))
     normalization(targetDF, inputsCol)
 
 
