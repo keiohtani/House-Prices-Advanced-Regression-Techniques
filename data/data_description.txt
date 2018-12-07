@@ -17,6 +17,21 @@ MSSubClass: Identifies the type of dwelling involved in the sale.
        180	PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
        190	2 FAMILY CONVERSION - ALL STYLES AND AGES
 
+Columns
+  ATTIC
+  FINISHED
+  SPLIT
+  SPLIT FOYER
+  DUPLEX
+  PUD
+  CONVERSION
+  1945
+  Story
+
+Accuracy before breaking down the column - 0.9695864432575162
+After - 0.9699048292116886
+After - 0.9693543126489279
+
 MSZoning: Identifies the general zoning classification of the sale.
 
        A	Agriculture
@@ -34,8 +49,8 @@ LotArea: Lot size in square feet
 
 Street: Type of road access to property
 
-       Grvl	Gravel
-       Pave	Paved
+       Grvl	Gravel  1 100000
+       Pave	Paved   0 200000
 
 Alley: Type of alley access to property
 

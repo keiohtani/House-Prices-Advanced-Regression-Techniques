@@ -4,65 +4,6 @@ import reading
 import visualization
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn import model_selection
-from sklearn.linear_model import LinearRegression
-import copy
-import pandas as pd
-import os
-
-
-"""
-Test function only
-"""
-
-class Score:
-    def __init__(self, score, name):
-        self.score = score
-        self.name = name
-
-
-"""
-LandSlope 0.9702540457807078
-1stFlrSF 0.9697972747829293
-YearBuilt 0.9697369394264912
-Original 0.96956577303446
-BldgType 0.9694745486085345
-GarageCond 0.9693082086453984
-ScreenPorch 0.9690054167215087
-HalfBath 0.9688091240215666
-EnclosedPorch 0.9681940680980062
-LowQualFinSF 0.9681576405004482
-OpenPorchSF 0.9681087559959425
-Utilities 0.9680853759421726
-"""
-
-
-def mainTest():
-    scoreList = []
-    numericDataCols = ["HalfBath", "LandSlope","BldgType","YearBuilt","LowQualFinSF","Utilities","1stFlrSF",
-                         "GarageCond","ScreenPorch","OpenPorchSF","EnclosedPorch"]
-    trainDF, inputsCol, outputCol = reading.readData()
-    preprocessing.preprocess(trainDF, trainDF, inputsCol)
-    alg = GradientBoostingRegressor(
-        random_state=1)  # accuracy does not change everytime it is run with set random_state
-    cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-    score = Score(np.mean(cvScores), 'Original')
-    scoreList.append(score)
-    for col in numericDataCols:
-        inputsCol.remove(col);
-        print(inputsCol)
-        trainDF = trainDF.loc[:, inputsCol + [outputCol]];
-        alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
-        cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
-        score = Score(np.mean(cvScores), col)
-        scoreList.append(score)
-    # visualization.visualize(trainDF,inputsCol,outputCol)
-    """
-    https://stackoverflow.com/questions/403421/how-to-sort-a-list-of-objects-based-on-an-attribute-of-the-objects
-    sorting objects
-    """
-    scoreList.sort(key=lambda x: x.score, reverse=True)
-    for score in scoreList:
-        print(score.name, score.score)
 
 
 """
@@ -77,14 +18,18 @@ Return:
 Description:
     Main body of the program
 """
+
 def main():
     trainDF, inputsCol, outputCol = reading.readData()
     preprocessing.preprocess(trainDF, trainDF, inputsCol)
     alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
+    additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
+    inputsCol = inputsCol + additionalCols
+    inputsCol = list(set(inputsCol) - set(['MSSubClass']))
     cvScores = model_selection.cross_val_score(alg, trainDF.loc[:, inputsCol], trainDF.loc[:, outputCol], cv=10, scoring='r2')
     print("Highest Accuracy with all features, default parameterizations =", np.mean(cvScores))
-    inputsCol = ['MSSubClass']
-    visualization.visualize(trainDF,inputsCol,outputCol)
+    inputsCol = additionalCols + [outputCol]
+    visualization.visualize(trainDF, additionalCols, outputCol)
     #Already done, testing what happens to accuracy removing one feature at a time
     """
     inputsColTemp = copy.deepcopy(inputsCol)
@@ -201,8 +146,9 @@ def main():
 
 def visualizationTest():
     trainDF, inputsCol, outputCol = reading.readData()
+    inputsCol = ['MSSubClass']
     visualization.visualizeScatterplot(trainDF,inputsCol,outputCol)
 
-# main()
+# visualizationTest()
 
-visualizationTest()
+main()
