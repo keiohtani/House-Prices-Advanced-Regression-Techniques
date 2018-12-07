@@ -24,7 +24,7 @@ Description:
 def main():
     trainDF, inputsCol, outputCol = reading.readData()
     preprocessing.preprocess(trainDF, trainDF, inputsCol)
-    alg = GradientBoostingRegressor(random_state = 1)   # accuracy does not change everytime it is run with set random_state
+    alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)   # accuracy does not change everytime it is run with set random_state
     # additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
     # inputsCol = inputsCol + additionalCols
     # inputsCol = list(set(inputsCol) - set(['MSSubClass']))
@@ -35,6 +35,7 @@ def main():
     #visualization.visualize(trainDF,inputsCol,outputCol)
     #Already done, testing what happens to accuracy removing one feature at a time
     
+    """
     inputsColTemp = copy.deepcopy(inputsCol)
     temp = {}
     temp["Nothing removed"] = np.mean(cvScores)
@@ -48,6 +49,7 @@ def main():
         inputsCol.append(featureRemoved)
     export = pd.Series(temp)
     export.to_csv(os.getcwd() + '/removeOneFeature_postParameterization.csv')
+    """
     
     
     #Testing various parameterizations
@@ -153,7 +155,26 @@ def visualizationTest():
     visualization.visualizeScatterplot(trainDF,inputsCol,outputCol)
 
 # visualizationTest()
+    
+def buildAndTestModel():
+    houseTrain, inputCols, outputCol = reading.readData()
+    preprocessing.preprocess(houseTrain, houseTrain, inputCols)
+    alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
+    cvScores = model_selection.cross_val_score(alg, houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol], cv=10, scoring='r2')
+    print(np.mean(cvScores))
+	
+    houseTest = pd.read_csv("data/test.csv")
+    preprocessing.preprocess(houseTest, houseTrain, inputCols)
+    
+    alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
+    alg.fit(houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol])
+    predictions = alg.predict(houseTest.loc[:, inputCols])
+    
+    submitDF = pd.DataFrame(
+            {"Row": houseTest.loc[:, "SalePrice"],
+             "Prediction": predictions})
+    submitDF.to_csv("data/submission.csv", index=False)
 
 main()
-
 #visualizationTest()
+#buildAndTestModel()

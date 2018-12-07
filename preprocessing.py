@@ -1,4 +1,5 @@
 from sklearn import preprocessing
+import numpy as np
 
 """
 Various conversion functions
@@ -269,7 +270,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
 
 
     # nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']) - set(additionalCols))  # - set(numericDataCols)
-    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']))
+    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea'])) #, 'MSSubClass'
     convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
     #Accuracy with ONLY convertNominalValue applied, including normalization = 0.9684257179045664
     #encodeNominalData(targetDF, inputsCol) #yields 0.8879956626324738
@@ -322,8 +323,6 @@ Return:
 Description:
     Encodes data values based on the median price of all houses with that value
 """
-
-
 def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
     for colName in inputCols:
@@ -340,3 +339,11 @@ def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
         #     colSeries = trainDF.loc[:, col]
         #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
     print('Conversion ended')
+
+#Attempted/Failed revision
+"""  
+def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
+    print("Conversion begins")
+    for column in inputCols:
+        targetDF.loc[:, column] = targetDF.loc[:, column].map(lambda value: np.median(sourceDF.loc[sourceDF.loc[:,column]==value].loc[:, outputCol]))
+"""
