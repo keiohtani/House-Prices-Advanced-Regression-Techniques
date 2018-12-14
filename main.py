@@ -157,13 +157,13 @@ def visualizationTest():
 # visualizationTest()
     
 def buildAndTestModel():
-    houseTrain, inputCols, outputCol = reading.readData()
+    houseTrain, inputCols, outputCol = reading.readData("data/train.csv")
     preprocessing.preprocess(houseTrain, houseTrain, inputCols)
-    alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
-    cvScores = model_selection.cross_val_score(alg, houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol], cv=10, scoring='r2')
-    print(np.mean(cvScores))
-	
-    houseTest = pd.read_csv("data/test.csv")
+    # alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
+    # cvScores = model_selection.cross_val_score(alg, houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol], cv=10, scoring='r2')
+    # print(np.mean(cvScores))
+
+    houseTest, inputCols, outputCol = reading.readData("data/train.csv")
     preprocessing.preprocess(houseTest, houseTrain, inputCols)
     
     alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
@@ -175,6 +175,6 @@ def buildAndTestModel():
              "Prediction": predictions})
     submitDF.to_csv("data/submission.csv", index=False)
 
-main()
+# main()
 #visualizationTest()
-#buildAndTestModel()
+buildAndTestModel()

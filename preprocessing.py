@@ -268,9 +268,9 @@ def preprocess(targetDF, sourceDF, inputsCol):
     https://stackoverflow.com/questions/3428536/python-list-subtraction-operation 
     """
 
-
+    continuousDataCols = ['LowQualFinSF', 'LotArea', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'TotalBsmtSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'TotRmsAbvGrd', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold']
     # nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']) - set(additionalCols))  # - set(numericDataCols)
-    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea'])) #, 'MSSubClass'
+    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea']) - set(continuousDataCols)) #, 'MSSubClass'
     convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
     #Accuracy with ONLY convertNominalValue applied, including normalization = 0.9684257179045664
     #encodeNominalData(targetDF, inputsCol) #yields 0.8879956626324738
@@ -326,13 +326,14 @@ Description:
 def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
     for colName in inputCols:
+        print(colName)
         # colName = 'MSSubClass'  # each column fx. MSSubClass
-        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby(
-            [colName]).median()  # returns DataFrame somehow so needs to be converted to Series
+        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby([colName]).median()  # returns DataFrame somehow so needs to be converted to Series
         # TODO: though accuracy is better with median, it may need to be adjusted depending on the distribution
         aveSeries = aveDF.iloc[:, 0]
+        print(aveSeries)
         colSeries = targetDF.loc[:, colName]
-        targetDF.loc[:, colName] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
+        targetDF.loc[:, colName] = colSeries.map(lambda value: aveSeries.loc[value])
         # for col in inputCols:
         #     # col = 'MSSubClass'  # each column fx. MSSubClass
         #     aveSeries = trainDF.loc[:, [col, outputCol]].groupby([col]).median()
