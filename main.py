@@ -158,21 +158,18 @@ def visualizationTest():
     
 def buildAndTestModel():
     houseTrain, inputCols, outputCol = reading.readData("data/train.csv")
-    preprocessing.preprocess(houseTrain, houseTrain, inputCols)
-    # alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
-    # cvScores = model_selection.cross_val_score(alg, houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol], cv=10, scoring='r2')
-    # print(np.mean(cvScores))
-
-    houseTest, inputCols, outputCol = reading.readData("data/train.csv")
+    inputCols.remove('Id')
+    houseTest = reading.readTestData("data/test.csv")
+    preprocessing.manageNAValues(houseTrain, inputCols)
     preprocessing.preprocess(houseTest, houseTrain, inputCols)
-    
+    preprocessing.preprocess(houseTrain, houseTrain, inputCols)
+
+
     alg = GradientBoostingRegressor(random_state = 1, n_estimators = 800)
     alg.fit(houseTrain.loc[:, inputCols], houseTrain.loc[:, outputCol])
     predictions = alg.predict(houseTest.loc[:, inputCols])
-    
-    submitDF = pd.DataFrame(
-            {"Row": houseTest.loc[:, "SalePrice"],
-             "Prediction": predictions})
+
+    submitDF = pd.DataFrame({"Id": houseTest.loc[:, "Id"], "SalePrice": predictions})
     submitDF.to_csv("data/submission.csv", index=False)
 
 # main()

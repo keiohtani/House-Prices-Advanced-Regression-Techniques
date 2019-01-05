@@ -20,8 +20,8 @@ Description:
 
 
 def readData(path):
-    inputsCol = ['MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
-                 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
+    inputsCol = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+                 'Alley', 'LotShape', 'LandContour', 'LotConfig',
                  'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
                  'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
                  'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
@@ -40,3 +40,24 @@ def readData(path):
     outputCol = 'SalePrice'
     trainDF = pd.read_csv(path, usecols = inputsCol + [outputCol])
     return trainDF, inputsCol, outputCol
+
+def readTestData(path):
+    inputsCol = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+                 'Alley', 'LotShape', 'LandContour', 'LotConfig',
+                 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
+                 'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
+                 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
+                 'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual',
+                 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',
+                 'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating',
+                 'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF',
+                 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath',
+                 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual',
+                 'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType',
+                 'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual',
+                 'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
+                 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
+                 'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
+                 'SaleCondition']  # We may want to drop Utilities because all the values are same except for one but the result is better with Utilities
+    trainDF = pd.read_csv(path, usecols = inputsCol)
+    return trainDF

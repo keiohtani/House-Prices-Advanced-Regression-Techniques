@@ -1,5 +1,6 @@
 from sklearn import preprocessing
 import numpy as np
+import os
 
 """
 Various conversion functions
@@ -170,8 +171,10 @@ Description:
 """
 
 
-def normalization(targetDF, columns):
-    targetDF.loc[:, columns] = (targetDF.loc[:, columns] - targetDF.loc[:, columns].min()) / (targetDF.loc[:, columns].max() - targetDF.loc[:, columns].min())
+def normalize(targetDF, columns):
+    min = targetDF.loc[:, columns].min()
+    max = targetDF.loc[:, columns].max()
+    targetDF.loc[:, columns] = (targetDF.loc[:, columns] - min) / (max - min)
 
 
 def standardize(df, columns):
@@ -254,6 +257,7 @@ Description:
 
 
 def preprocess(targetDF, sourceDF, inputsCol):
+
     manageNAValues(targetDF, inputsCol)
 
     # additionalCols = ['Attic', 'Finished', 'Split', 'Foyer', 'Duplex', 'Pud', 'Conversion', 'Story']
@@ -261,6 +265,7 @@ def preprocess(targetDF, sourceDF, inputsCol):
     # for col in additionalCols:
     #     targetDF.loc[:, col] = 0
 
+    nominalDataCol = ['PavedDrive', 'MSZoning', 'Street', 'Alley','LotShape', 'LandContour', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'Functional', 'GarageType', 'GarageFinish', 'MiscFeature', 'SaleType', 'SaleCondition']
     outputCol = 'SalePrice'
     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual", "GarageCond"]
     """
@@ -268,14 +273,15 @@ def preprocess(targetDF, sourceDF, inputsCol):
     https://stackoverflow.com/questions/3428536/python-list-subtraction-operation 
     """
 
-    continuousDataCols = ['LowQualFinSF', 'LotArea', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'TotalBsmtSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'TotRmsAbvGrd', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold']
+    # continuousDataCols = ['LowQualFinSF', 'LotArea', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'TotalBsmtSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'TotRmsAbvGrd', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold']
     # nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea', 'MSSubClass']) - set(additionalCols))  # - set(numericDataCols)
-    nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea']) - set(continuousDataCols)) #, 'MSSubClass'
+    # nominalDataCol = list(set(inputsCol) - set(exConversionCols) - set(['BsmtQual', 'PoolQC', 'MasVnrType', 'Fence', '1stFlrSF', 'GarageArea']) - set(continuousDataCols)) #, 'MSSubClass'
     convertNominalValue(targetDF, sourceDF, nominalDataCol, outputCol)
     #Accuracy with ONLY convertNominalValue applied, including normalization = 0.9684257179045664
     #encodeNominalData(targetDF, inputsCol) #yields 0.8879956626324738
     # targetDF.loc[:, additionalCols + ['MSSubClass']] = targetDF.loc[:, additionalCols + ['MSSubClass']].apply(lambda row: msSubClassConversion(row), axis = 1)
     # targetDF.drop('MSSubClass', axis = 1)
+
 
     # print(exConversionCols)
     targetDF.loc[:, exConversionCols] = targetDF.loc[:, exConversionCols].applymap(lambda x: nominalValueConversion(x))
@@ -284,9 +290,11 @@ def preprocess(targetDF, sourceDF, inputsCol):
     targetDF.loc[:, 'MasVnrType'] = targetDF.loc[:, 'MasVnrType'].map(lambda x: masVnrTypeConversion(x))
     targetDF.loc[:, 'Fence'] = targetDF.loc[:, 'Fence'].map(lambda x: fenceValueConversion(x))
     targetDF.loc[:, 'YearBuilt'] = targetDF.loc[:, 'YearBuilt'].map(lambda x: dateToAgeConversion(x)) #went from 0.9695631660091774 to 0.9695838362322334
-    # inputsCol = list(set(inputsCol) - set(additionalCols))
-    normalization(targetDF, inputsCol)
 
+    targetDF.to_csv(os.getcwd() + '/houseTestPreprocessed.csv')
+    # standardize(targetDF, inputsCol)
+    # normalize(targetDF, inputsCol)    # Both normalization and standardization worse the accuracy for a test case.
+    targetDF.to_csv(os.getcwd() + '/houseTestPreprocessedAfterNormalization.csv')
 
 # def testPreprocess(targetDF, sourceDF, inputsCol, col):     # test function to see the difference between different value to be encoded.
 #     exConversionCols = ["ExterQual", "ExterCond", "BsmtCond", "KitchenQual", "FireplaceQu", "GarageQual",
@@ -323,22 +331,27 @@ Return:
 Description:
     Encodes data values based on the median price of all houses with that value
 """
+
+
+# GLQ does not exist in train set.
+
 def convertNominalValue(targetDF, sourceDF, inputCols, outputCol):
     print('Conversion begins')
+    mean = sourceDF.loc[:, outputCol].mean()
     for colName in inputCols:
-        print(colName)
-        # colName = 'MSSubClass'  # each column fx. MSSubClass
-        aveDF = sourceDF.loc[:, [colName, outputCol]].groupby([colName]).median()  # returns DataFrame somehow so needs to be converted to Series
-        # TODO: though accuracy is better with median, it may need to be adjusted depending on the distribution
-        aveSeries = aveDF.iloc[:, 0]
-        print(aveSeries)
+
+        gp = sourceDF.loc[:, [colName, outputCol]].groupby(colName).mean().head()
+        aveSeries = gp.loc[:, 'SalePrice'] # TODO converting gp object to series object
+
         colSeries = targetDF.loc[:, colName]
-        targetDF.loc[:, colName] = colSeries.map(lambda value: aveSeries.loc[value])
+        targetDF.loc[:, colName] = colSeries.map(lambda value: aveSeries.loc[value] if value in aveSeries else mean)    # TODO some kind of testing to see if there is a way to return mean when the value label is not in the aveSeries
         # for col in inputCols:
         #     # col = 'MSSubClass'  # each column fx. MSSubClass
         #     aveSeries = trainDF.loc[:, [col, outputCol]].groupby([col]).median()
         #     colSeries = trainDF.loc[:, col]
         #     trainDF.loc[:, col] = colSeries.index.map(lambda i: aveSeries.loc[colSeries.iloc[i]])
+
+    # targetDF.to_csv(os.getcwd() + '/houseTestPreprocessed.csv')
     print('Conversion ended')
 
 #Attempted/Failed revision
